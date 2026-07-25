@@ -1,0 +1,135 @@
+:root {
+  /* TOKENS DE DISEÑO CORPORATIVO (Estética Premium Minimalista) */
+  --bg-dark: #000000;
+  --bg-surface: #0f0f0f;
+  --bg-surface-hover: #1a1a1a;
+  --bg-sidebar: #050505; 
+  
+  --text-main: #ffffff;
+  --text-muted: #888888;
+  --border-color: #222222;
+  
+  /* Acentos en Blanco y Plata */
+  --primary: #ffffff;
+  --primary-hover: #d1d5db; 
+  
+  --danger: #ef4444;
+
+  /* Tipografías Corporativas Limpias */  
+  --font-display: 'Poppins', sans-serif;
+  --font-accent: 'Poppins', sans-serif; 
+  --font-body: 'Inter', sans-serif;
+  
+  --transition: 0.3s ease;
+  
+  --max-width: 800px;
+  --header-height: 80px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg-dark); color: var(--text-main); font-size: 14px; line-height: 1.5; height: 100vh; overflow: hidden; }
+.hidden { display: none !important; } .text-danger { color: var(--danger) !important; } .mt-4 { margin-top: 1.5rem; }
+
+.btn { padding: 12px 20px; border: none; border-radius: 4px; font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); }
+.btn-primary { background: var(--primary); color: #000; } .btn-primary:hover { background: var(--primary-hover); }
+.btn-secondary { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+.btn-secondary:hover { border-color: var(--text-main); }
+.btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--danger); }
+.btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+
+.spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.login-wrapper { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; background: var(--bg-dark); z-index: 1000; }
+.login-card { background: var(--bg-surface); padding: 40px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center; width: 90%; max-width: 400px; }
+.login-subtitle { color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; font-size: 0.8rem; margin-bottom: 30px; }
+#login-form input { width: 100%; padding: 14px; margin-bottom: 20px; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-main); font-family: var(--font-body); }
+#login-form input:focus { outline: none; border-color: var(--primary); }
+#login-form .btn { width: 100%; }
+.error-msg { color: var(--danger); font-size: 0.85rem; margin-top: 15px; }
+
+.dashboard-wrapper { display: flex; height: 100vh; flex-direction: row; }
+.sidebar { width: 260px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 50; }
+.sidebar-header { padding: 30px 20px; border-bottom: 1px solid var(--border-color); text-align: center; }
+.sidebar-nav { flex-grow: 1; padding: 20px 0; }
+.nav-item { width: 100%; text-align: left; padding: 15px 25px; background: transparent; border: none; color: var(--text-muted); font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; transition: var(--transition); }
+.nav-item:hover { background: var(--bg-surface); color: var(--text-main); }
+.nav-item.active { background: var(--bg-surface-hover); color: var(--text-main); border-left: 3px solid var(--primary); }
+.sidebar-footer { padding: 20px; border-top: 1px solid var(--border-color); }
+
+.main-content { flex-grow: 1; background: var(--bg-dark); padding: 40px; overflow-y: auto; }
+.view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.view-title { font-family: var(--font-display); font-size: 2rem; font-weight: 600; }
+
+/* ── ACORDEÓN DE SERVICIOS (Corregido) ── */
+.category-block { margin-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); }
+.accordion-header { width: 100%; display: flex; justify-content: space-between; align-items: center; background: transparent; border: none; padding: 1.5rem 0; cursor: pointer; font-family: var(--font-body); font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; transition: var(--transition); }
+.accordion-header:hover, .accordion-header.active { color: var(--text-main); }
+.accordion-icon { font-size: 0.75rem; transition: transform 0.3s ease; }
+.accordion-header.active .accordion-icon { transform: rotate(180deg); color: var(--primary); }
+.accordion-content { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+.accordion-content.open { grid-template-rows: 1fr; }
+.accordion-inner { overflow: hidden; } /* Esta clase oculta los márgenes residuales */
+.services-inner-grid { display: flex; flex-direction: column; gap: 12px; padding-bottom: 1.5rem; padding-top: 0.5rem; }
+
+.service-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 6px; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+.service-card h3 { font-family: var(--font-body); font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
+.service-card .duration { font-size: 0.85rem; color: var(--text-muted); }
+.service-card .price { font-family: var(--font-body); font-size: 1rem; font-weight: 600; color: var(--text-muted); margin-top:5px;}
+.service-card-actions { display: flex; gap: 10px; }
+
+/* TABLA (Para Agenda) */
+.table-container { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+.admin-table { width: 100%; border-collapse: collapse; text-align: left; }
+.admin-table th { padding: 16px 20px; background: var(--bg-sidebar); color: var(--text-muted); font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border-color); }
+.admin-table td { padding: 16px 20px; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle; }
+.badge { padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.badge.active { background: rgba(46, 125, 50, 0.15); color: #81c784; border: 1px solid rgba(46, 125, 50, 0.3); }
+.badge.inactive { background: rgba(136, 136, 136, 0.1); color: var(--text-muted); border: 1px solid var(--border-color); }
+
+/* MODALES */
+.modal-overlay { position: fixed; inset: 0; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); z-index: 2000; }
+.modal-card { background: var(--bg-surface); padding: 30px; border-radius: 8px; border: 1px solid var(--border-color); width: 90%; max-width: 450px; }
+.modal-title { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; margin-bottom: 20px; }
+.modal-text { color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;}
+.field input { width: 100%; padding: 12px; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-main); font-family: var(--font-body); font-size: 0.95rem; }
+.field input:focus { outline: none; border-color: var(--primary); }
+.modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 30px; }
+
+/* ── RESPONSIVE ADMIN (Blindado) ── */
+@media (max-width: 900px) {
+  .dashboard-wrapper { flex-direction: column; }
+  
+  /* Menú lateral pasa a ser horizontal deslizable */
+  .sidebar { width: 100%; height: auto; flex-direction: row; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid var(--border-color); border-right: none; }
+  .sidebar-header { padding: 0; border: none; }
+  .sidebar-nav { padding: 0; display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+  .nav-item { padding: 10px 5px; font-size: 0.75rem; text-align: center; border-left: none; border-bottom: 2px solid transparent; }
+  .nav-item.active { border-left: none; border-bottom: 2px solid var(--primary); }
+  .sidebar-footer { padding: 0; border: none; display: flex; align-items: center; }
+
+  .main-content { padding: 20px 15px; }
+  .view-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .view-header .btn { width: 100%; }
+
+  /* Acordeón de Servicios Móvil */
+  .service-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .service-card-actions { width: 100%; flex-direction: column; gap: 10px; }
+  .service-card-actions .btn { width: 100%; margin: 0; }
+
+  /* Tabla de Agenda transformada en Tarjetas */
+  .admin-table, .admin-table tbody, .admin-table tr, .admin-table td { display: block; width: 100%; }
+  .admin-table thead { display: none; }
+  .admin-table tr { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-surface); padding: 15px; }
+  .admin-table td { border-bottom: 1px solid var(--border-color); padding: 12px 0; text-align: right; display: flex; justify-content: space-between; align-items: center; }
+  .admin-table td:last-child { border-bottom: none; justify-content: flex-end; padding-bottom: 0; }
+  .admin-table td:last-child .btn { width: 100%; margin-top: 10px; }
+  .admin-table td::before { content: attr(data-label); text-align: left; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; margin-right: 15px; }
+
+  /* Modales al 100% */
+  .modal-card { width: 95%; padding: 25px 20px; }
+  .modal-actions { flex-direction: column; gap: 10px; }
+  .modal-actions .btn { width: 100%; margin: 0; }
+}

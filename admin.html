@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda Solutto studio</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+
+  <div id="login-view" class="login-wrapper active">
+    <div class="login-card">
+      <img src="/logo-solutto.png" alt="Solutto studio" style="max-height: 50px; width: auto; margin: 0 auto 15px; display:block;">
+      <p class="login-subtitle">Administracion Solutto studio</p>
+      <form id="login-form">
+        <input type="password" id="admin-pass" placeholder="Contraseña" required>
+        <button type="submit" class="btn btn-primary" id="btn-login">Ingresar</button>
+        <p id="login-error" class="error-msg hidden">Contraseña incorrecta</p>
+      </form>
+    </div>
+  </div>
+
+  <div id="dashboard-view" class="dashboard-wrapper hidden">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <img src="/logo-solutto.png" alt="Solutto studio" style="max-height: 40px; width: auto;">
+      </div>
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-target="view-servicios">Gestión de Servicios</button>
+        <button class="nav-item" data-target="view-agenda">Agenda de Reservas</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="btn-logout" class="nav-item text-danger">Cerrar Sesión</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section id="view-servicios" class="admin-view active">
+        <div class="view-header">
+          <h2 class="view-title">Servicios</h2>
+          <button id="btn-open-add-service" class="btn btn-primary">NUEVO SERVICIO</button>
+        </div>
+        <div id="admin-services-container"></div>
+      </section>
+
+      <section id="view-agenda" class="admin-view hidden">
+        <div class="view-header">
+          <h2 class="view-title">Agenda de Reservas</h2>
+          <button id="btn-open-block" class="btn btn-secondary">BLOQUEAR HORARIO</button>
+        </div>
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Fecha y Hora</th>
+                <th>Cliente</th>
+                <th>Teléfono</th>
+                <th>Servicio</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="table-agenda-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODALES DE ADMIN (Iguales) -->
+  <div id="modal-add-service" class="modal-overlay hidden"><div class="modal-card"><h3 class="modal-title">Agregar Servicio</h3><form id="form-add-service"><div class="field"><label>Categoría</label><input type="text" id="add-cat" required></div><div class="field"><label>Nombre del Servicio</label><input type="text" id="add-nom" required></div><div class="field"><label>Precio</label><input type="number" id="add-pre" required></div><div class="field"><label>Duración (minutos)</label><input type="number" id="add-dur" required></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="btn-close-modal-service">Cancelar</button><button type="submit" class="btn btn-primary" id="btn-save-service">Guardar</button></div></form></div></div>
+  <div id="modal-edit-service" class="modal-overlay hidden"><div class="modal-card"><h3 class="modal-title">Editar Servicio</h3><p id="edit-nom-display" style="color:var(--primary); font-weight:600; font-size:1.1rem; margin-bottom:15px;"></p><form id="form-edit-service"><div class="field"><label>Precio</label><input type="number" id="edit-pre" required></div><div class="field"><label>Duración (minutos)</label><input type="number" id="edit-dur" required></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="btn-close-edit-service">Cancelar</button><button type="submit" class="btn btn-primary" id="btn-save-edit">Guardar Cambios</button></div></form></div></div>
+  <div id="modal-block-time" class="modal-overlay hidden"><div class="modal-card"><h3 class="modal-title">Bloquear Horario</h3><form id="form-block-time"><div class="field"><label>Fecha</label><input type="date" id="block-date" required></div><div style="display:flex; gap:10px;"><div class="field" style="flex:1;"><label>Hora Inicio</label><input type="time" id="block-start" required></div><div class="field" style="flex:1;"><label>Hora Fin</label><input type="time" id="block-end" required></div></div><div class="field"><label>Motivo</label><input type="text" id="block-reason"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="btn-close-block">Cancelar</button><button type="submit" class="btn btn-primary" id="btn-save-block">Bloquear</button></div></form></div></div>
+  <div id="modal-cancel-booking" class="modal-overlay hidden"><div class="modal-card"><h3 class="modal-title text-danger">Eliminar</h3><p class="modal-text">¿Estás seguro de cancelar este registro del calendario?</p><div class="modal-actions mt-4"><button type="button" class="btn btn-secondary" id="btn-close-cancel-modal">Volver</button><button type="button" class="btn btn-danger" id="btn-confirm-cancel">Sí, Eliminar</button></div></div></div>
+
+  <div id="global-loader" class="modal-overlay hidden"><div class="spinner"></div></div>
+  <script src="/admin.js"></script>
+</body>
+</html>

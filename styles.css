@@ -1,0 +1,345 @@
+:root {
+  /* TOKENS DE DISEÑO CORPORATIVO (Estética Premium Minimalista) */
+  --bg-dark: #000000;
+  --bg-surface: #0f0f0f;
+  --bg-surface-hover: #1a1a1a;
+  
+  --text-main: #ffffff;
+  --text-muted: #888888;
+  --border-color: #222222;
+  
+  /* Acentos en Blanco y Plata */
+  --primary: #ffffff;
+  --primary-hover: #d1d5db; 
+  
+  --danger: #ef4444;
+
+  /* Tipografías Corporativas Limpias */
+  --font-display: 'Poppins', sans-serif;
+  --font-accent: 'Poppins', sans-serif; 
+  --font-body: 'Inter', sans-serif;
+  
+  --transition: 0.3s ease;
+  
+  --max-width: 800px;
+  --header-height: 80px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER PÚBLICO (Con efecto Blur / Glassmorphism) ── */
+.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--header-height);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+/* ── LOGO IMAGEN ── */
+.logo-img {
+  max-height: 65px;
+  width: auto;      
+  max-width: 85vw;
+  object-fit: contain;
+}
+
+.header__logo-fallback {
+  font-family: var(--font-accent);
+  font-size: 3.2rem;
+  font-weight: 400;
+  color: var(--text-main);
+  margin: 0;
+}
+
+#app {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: calc(var(--header-height) + 50px) 20px 40px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* ── TÍTULOS Y WIZARD DE PROGRESO ── */
+.step-title h2 {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 40px;
+  color: var(--text-main);
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.progress-step {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-body);
+  font-size: 0.9rem; font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-dark);
+  transition: var(--transition);
+}
+
+.progress-step.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #000;
+}
+
+.progress-step.done {
+  background: var(--border-color);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.progress-line {
+  width: 50px; height: 1px;
+  background: var(--border-color);
+  transition: var(--transition);
+}
+
+.progress-line.done { background: var(--primary); }
+
+/* ── ANIMACIONES DE VISTA ── */
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.view { display: none; }
+.view.active { display: block; animation: slideUpFade 0.4s ease forwards; }
+
+/* ── ACORDEÓN DE CATEGORÍAS (Corregido para Móvil) ── */
+.category-block {
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accordion-header {
+  width: 100%;
+  display: flex; justify-content: space-between; align-items: center;
+  background: transparent; border: none;
+  padding: 1.5rem 0; cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1.5px;
+  transition: var(--transition);
+}
+
+.accordion-header:hover, .accordion-header.active { color: var(--text-main); }
+.accordion-icon { font-size: 0.75rem; transition: transform 0.3s ease; }
+.accordion-header.active .accordion-icon { transform: rotate(180deg); color: var(--primary); }
+
+.accordion-content {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+
+.accordion-content.open { 
+  grid-template-rows: 1fr; 
+  padding-bottom: 1.5rem; 
+}
+
+.accordion-inner { 
+  overflow: hidden; 
+}
+
+/* ── TARJETAS DE SERVICIO ── */
+.services-inner-grid {
+  overflow: hidden; 
+  display: flex; flex-direction: column;
+  gap: 12px; padding-top: 0.5rem;
+}
+
+.service-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px; padding: 20px 24px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.service-card:hover {
+  background: var(--bg-surface-hover);
+}
+
+.service-card.selected {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.05); /* Ajustado para el modo blanco y negro */
+}
+
+.service-card-info { flex-grow: 1; }
+
+.service-card h3 {
+  font-family: var(--font-body);
+  font-size: 0.95rem; font-weight: 700;
+  margin-bottom: 4px; color: var(--text-main);
+}
+.service-card .duration { font-size: 0.85rem; color: var(--text-muted); }
+.service-card .price { 
+  font-family: var(--font-body);
+  font-size: 1rem; font-weight: 600; 
+  color: var(--text-muted); 
+}
+
+/* ── FORMULARIOS E INPUTS ── */
+.field { margin-bottom: 24px; }
+.field label, .date-picker-col label {
+  display: block; font-size: 0.75rem; font-weight: 600;
+  margin-bottom: 8px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.field input, .input-date {
+  width: 100%; padding: 14px 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-main);
+  font-family: var(--font-body); font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.field input:focus, .input-date:focus {
+  outline: none; border-color: var(--primary);
+}
+
+.field input.error { border-color: var(--danger); }
+.field-error { display: block; font-size: 0.75rem; color: var(--danger); margin-top: 6px; min-height: 1em; }
+
+/* ── SELECTOR DE HORARIOS ── */
+.slots-container {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 12px; margin-top: 15px;
+}
+
+.slot-btn {
+  padding: 12px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--bg-surface);
+  color: var(--text-main);
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+  cursor: pointer; transition: var(--transition);
+}
+
+.slot-btn:hover { background: var(--bg-surface-hover); border-color: #555; }
+.slot-btn.selected { border-color: var(--primary); background: var(--primary); color: #000; font-weight: 600; }
+
+/* ── BOTONES GLOBALES ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 24px; border-radius: 4px; border: none;
+  font-family: var(--font-body); font-size: 0.85rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+  cursor: pointer; transition: var(--transition);
+  width: 100%; margin-top: 24px;
+}
+
+.btn-primary { background: var(--primary); color: #000; }
+.btn-primary:hover { background: var(--primary-hover); }
+.btn-primary:disabled { opacity: 0.5; pointer-events: none; }
+
+.btn-secondary { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); margin-top: 0; }
+.btn-secondary:hover { border-color: var(--text-main); }
+
+.nav-buttons { margin-top: 32px; display: flex; gap: 16px; }
+
+/* ── RESUMEN DE RESERVA ── */
+.selected-info-card, .confirmation-details {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 6px; padding: 24px;
+  margin-bottom: 30px; display: flex; flex-wrap: wrap; gap: 24px;
+}
+.info-item { flex: 1; min-width: 130px; }
+.info-label, .detail-label {
+  font-size: 0.75rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px;
+}
+.info-value, .detail-value { font-size: 1rem; font-weight: 600; color: var(--text-main); }
+
+/* ── MODALES ── */
+.hidden { display: none !important; }
+
+.modal-overlay {
+  position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+  z-index: 2000; background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+}
+
+.success-modal {
+  width: 100%; max-width: 400px; border-radius: 8px; padding: 40px 30px;
+  text-align: center; background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+}
+
+.modal__icon { width: 56px; height: 56px; margin: 0 auto 24px; color: var(--primary); }
+.modal__title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; margin-bottom: 16px; }
+
+/* ── FOOTER ── */
+.site-footer {
+  width: 100%; padding: 30px 0; display: flex; justify-content: center;
+  border-top: 1px solid var(--border-color); margin-top: auto;
+}
+.footer__by { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.footer__brand { font-weight: 600; color: var(--text-main); text-decoration: none; margin-left: 6px; transition: color 0.3s ease;}
+.footer__brand:hover { color: var(--primary-hover); }
+
+/* ── RESPONSIVE VISTA PÚBLICA ── */
+@media (max-width: 600px) {
+  #app { padding: calc(var(--header-height) + 30px) 15px 40px; }
+  .step-title h2 { font-size: 1.8rem; margin-bottom: 30px; }
+  
+  /* Ajuste de los pasos (bolitas) */
+  .progress-step { width: 32px; height: 32px; font-size: 0.8rem; }
+  .progress-line { width: 30px; }
+
+  /* Tarjetas de Servicios y Resumen */
+  .service-card { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .service-card .price { margin-top: 0; }
+  
+  .selected-info-card, .confirmation-details { flex-direction: column; gap: 15px; padding: 15px; }
+  .info-item { width: 100%; }
+
+  /* Grilla de horarios ajustada */
+  .slots-container { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+  
+  /* Modales y Botones */
+  .nav-buttons { flex-direction: column-reverse; gap: 10px; }
+  .nav-buttons .btn { margin: 0; width: 100%; }
+  .success-modal { padding: 30px 20px; }
+}

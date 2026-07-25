@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agenda solutto studio</title>
+  
+  <!-- Tipografías Corporativas (Inter y Poppins) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <!-- ── HEADER PÚBLICO ── -->
+  <header class="site-header">
+    <img src="/logo-solutto.png" alt="Solutto studio" class="logo-img">
+  </header>
+
+  <div id="app">
+    <div class="progress-bar">
+      <div class="progress-step active" id="ps-1">1</div>
+      <div class="progress-line" id="pl-1"></div>
+      <div class="progress-step" id="ps-2">2</div>
+      <div class="progress-line" id="pl-2"></div>
+      <div class="progress-step" id="ps-3">3</div>
+      <div class="progress-line" id="pl-3"></div>
+      <div class="progress-step" id="ps-4">4</div>
+    </div>
+
+    <div class="step-title" id="step-title">
+      <h2>Elege tu servicio</h2>
+    </div>
+
+    <section id="step-services" class="view active">
+      <div id="loader-services" class="spinner-container hidden"><div class="spinner"></div></div>
+      <p id="services-error" class="error-msg hidden"></p>
+      <div id="services-grid"></div>
+    </section>
+
+    <section id="step-datetime" class="view">
+      <div id="selected-service-info" class="selected-info-card"></div>
+      <div class="field">
+        <label for="date-input">Seleccioná una fecha</label>
+        <input type="date" id="date-input" class="input-date">
+      </div>
+      <div id="loader-slots" class="spinner-container hidden"><div class="spinner"></div></div>
+      <p id="slots-error" class="error-msg hidden"></p>
+      <div id="slots-container" class="slots-container">
+        <p class="slots-placeholder">Seleccioná una fecha para ver los horarios disponibles.</p>
+      </div>
+    </section>
+
+    <section id="step-form" class="view">
+      <div id="selected-info-card" class="selected-info-card"></div>
+      <form id="booking-form">
+        <input type="text" name="website" style="display:none;">
+        <div class="field"><label>Nombre y Apellido</label><input type="text" name="cliente" placeholder="Ej: Camila González"><span class="field-error" id="error-cliente"></span></div>
+        <div class="field"><label>Email</label><input type="email" name="email" placeholder="Ej: camila@email.com"><span class="field-error" id="error-email"></span></div>
+        <div class="field"><label>Teléfono (WhatsApp)</label><input type="tel" name="telefono" placeholder="Ej: 1123456789"><span class="field-error" id="error-telefono"></span></div>
+        <p id="global-error" class="error-msg hidden" style="text-align:center; margin-bottom: 15px;"></p>
+        <button type="submit" class="btn btn-primary" id="btn-submit">Confirmar reserva</button>
+      </form>
+    </section>
+
+    <section id="step-confirmation" class="view">
+      <div class="success-icon-large" style="text-align:center; color: var(--primary); font-size: 3rem; margin-bottom: 20px;">✓</div>
+      <div id="confirmation-details" class="confirmation-details"></div>
+      <button class="btn btn-primary" id="btn-new-booking">Hacer otra reserva</button>
+    </section>
+
+    <div class="nav-buttons">
+      <button class="btn btn-secondary hidden" id="btn-back">Volver</button>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="site-footer">
+      <span class="footer__by">Powered by</span>
+      <a href="https://awtechnology.dev" target="_blank" rel="noopener noreferrer" class="footer__brand">Aw Technology</a>
+    </footer>
+  </div>
+
+  <div id="success-modal-overlay" class="modal-overlay hidden">
+    <div class="success-modal" id="success-modal">
+      <div class="modal__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+      <h3 class="modal__title">¡Reserva Exitosa!</h3>
+      <p style="color: var(--text-muted); margin-bottom: 20px;">Te enviamos los detalles a tu email.</p>
+      <div style="background: var(--bg-dark); padding: 15px; border-radius: 6px; margin-bottom: 25px; text-align:left;">
+        <div style="font-size: 0.85rem; font-weight:600; color:var(--primary); margin-bottom: 5px;" id="modal-date"></div>
+        <div style="font-size: 0.85rem; color:var(--text-main);" id="modal-time"></div>
+        <div style="font-size: 0.85rem; color:var(--text-main);" id="modal-service"></div>
+      </div>
+      <button class="btn btn-primary" id="btn-finalizar">Entendido</button>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
