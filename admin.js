@@ -1,5 +1,5 @@
 // ATENCIÓN HUMANO: Pega aquí la URL NUEVA que generaste en el paso anterior.
-const API_URL = "https://script.google.com/macros/s/AKfycbywBjNrfKOpmuwDap0ktJag8BqsxR30jVmURvZOU2Vkq6Osus5vZ5dHNYXhvWIQt55_qA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyVDbQ4Fp7cbkCloc8d9CT_cQ-zXrxo_TbvH83yTkor1dsqr9_ZctbqsmfCCSY_yiYUSQ/exec";
 
 const $ = id => document.getElementById(id);
 
