@@ -2,100 +2,446 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agenda solutto studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   
-  <!-- Tipografías Corporativas (Inter y Poppins) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Nomi Turnos">
+  <meta name="application-name" content="Nomi">
   
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/png" id="favicon-principal" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" id="apple-touch-principal" href="/apple-touch-icon.png">
+  <meta name="theme-color" content="#1a1d24">
+
+  <title>Reserva de Turnos - Nomi</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    /* TEMA NOMI DINÁMICO: UX/UI Premium y Accesibilidad */
+    :root {
+      --bg-color: #1a1d24; 
+      --card-bg: #2E343A; 
+      --input-bg: #22272c; 
+      --text-main: #FFFFFF; 
+      --text-muted: #9ba4b5; 
+      --accent: #3841F2; 
+      --accent-hover: #5a61f5;   
+      --brand-pink: #FF3488; 
+      --success: #DFF98E; 
+      --border: #3f4752; 
+      --focus-ring: rgba(56, 65, 242, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; -webkit-tap-highlight-color: transparent; }
+    
+    body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; min-height: 100dvh; padding-top: calc(15px + env(safe-area-inset-top)); padding-bottom: calc(30px + env(safe-area-inset-bottom)); padding-left: 15px; padding-right: 15px; transition: background-color 0.4s ease; }
+    
+    .booking-container { background: var(--card-bg); padding: 30px 25px; border-radius: 28px; border: 1px solid rgba(255, 255, 255, 0.08); width: 100%; max-width: 460px; box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.2); }
+
+    h1 { font-size: 1.6rem; margin-bottom: 8px; font-weight: 700; text-align: center; color: var(--text-main); letter-spacing: -0.5px; }
+    p.subtitle { color: var(--text-muted); font-size: 0.95rem; text-align: center; margin-bottom: 30px; font-weight: 400; }
+
+    .form-group { margin-bottom: 24px; }
+    label.section-label { display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600; padding-left: 4px; }
+    
+    select, input[type="text"], input[type="email"], input[type="tel"] { width: 100%; padding: 16px 20px; background: var(--input-bg); border: 1px solid var(--text-muted); color: var(--text-main); border-radius: 14px; font-size: 0.95rem; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); appearance: none; color-scheme: dark; font-weight: 500;}
+    select:focus, input:focus { outline: none; border-color: #e5e7eb; box-shadow: 0 0 0 3px rgba(229,231,235,0.15); background: var(--bg-color); }
+    select:disabled, input:disabled { opacity: 0.5; cursor: not-allowed; }
+    select::placeholder, input::placeholder { color: var(--text-muted); opacity: 0.85; }
+    input[type="date"] { color-scheme: dark; }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); }
+
+    .pago-options { display: flex; flex-direction: column; gap: 10px; }
+    .pago-card { flex: 1; background: var(--input-bg); border: 1px solid var(--text-muted); border-radius: 14px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; }
+    .pago-card:has(input:checked),
+    .prof-card.active {
+        border-color: var(--accent) !important;
+        background: color-mix(in srgb, var(--accent) 8%, var(--card-bg)) !important;
+        box-shadow: 0 0 0 1px var(--accent);
+    }
+    .pago-card input { display: none; }
+    .pago-card span { font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+    .mp-notice { text-align: center; margin-top: 12px; margin-bottom: 24px; font-size: 0.8rem; color: var(--text-muted); font-weight: 500;}
+
+    .trigger-card { background: var(--input-bg); border: 1px solid var(--text-muted); border-radius: 14px; padding: 18px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: all 0.3s ease; }
+    .trigger-card:hover { border-color: var(--text-muted); }
+    .trigger-card .tc-text { font-size: 0.95rem; color: var(--text-main); font-weight: 600; }
+    .trigger-card .tc-text.placeholder { color: var(--text-muted); font-weight: 500; }
+    .trigger-card .tc-icon { color: var(--text-muted); font-size: 1.2rem; }
+    .trigger-card.selected { border-color: #e5e7eb; box-shadow: 0 0 0 3px rgba(229,231,235,0.15), inset 0 0 0 1px #e5e7eb; background: var(--bg-color); }
+
+    .coupon-trigger { color: var(--text-muted); font-size: 0.85rem; font-weight: 500; cursor: pointer; text-align: center; display: block; margin-top: 5px; transition: color 0.2s; text-decoration: underline; text-decoration-color: rgba(255,255,255,0.2); text-underline-offset: 4px; }
+    .coupon-trigger:hover { color: var(--text-main); text-decoration-color: var(--text-main); }
+    
+    .coupon-wrapper { display: flex; gap: 8px; margin-top: 12px; overflow: hidden; transition: all 0.3s ease; }
+    .coupon-wrapper input { padding: 14px 18px; font-size: 0.9rem; text-transform: uppercase; flex-grow: 1; letter-spacing: 1px; font-weight: 600;}
+    .coupon-wrapper .btn-apply { background: var(--border); color: var(--text-main); border: none; border-radius: 14px; padding: 0 24px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px;}
+    .coupon-wrapper .btn-apply:hover { filter: brightness(1.2); }
+    
+    .coupon-msg { text-align: center; font-size: 0.85rem; margin-top: 12px; font-weight: 600; padding: 10px; border-radius: 8px;}
+    .coupon-msg.success { color: #1e4620; background-color: var(--success); }
+    .coupon-msg.error { color: #fff; background-color: var(--brand-pink); }
+
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: flex-end; z-index: 1000; opacity: 1; transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .modal-overlay.hidden { opacity: 0; pointer-events: none; }
+    .modal-card { background: var(--card-bg); width: 100%; max-width: 500px; height: 90vh; border-radius: 28px 28px 0 0; display: flex; flex-direction: column; border-top: 1px solid rgba(255,255,255,0.08); transform: translateY(0); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 -10px 40px rgba(0,0,0,0.6); }
+    .modal-overlay.hidden .modal-card { transform: translateY(100%); }
+
+    @media (min-width: 500px) {
+      .modal-overlay { align-items: center; padding: 20px; }
+      .modal-card { height: 85vh; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 25px 60px rgba(0,0,0,0.6); }
+    }
+
+    .modal-header { padding: 24px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+    .modal-title { font-size: 1.2rem; font-weight: 700; color: var(--text-main); letter-spacing: -0.3px;}
+    .btn-close { background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .btn-close:hover { background: var(--brand-pink); color: #fff; border-color: var(--brand-pink); }
+
+    .modal-body { padding: 20px 25px; flex-grow: 1; overflow-y: hidden; display: flex; flex-direction: column; }
+    .search-input { margin-bottom: 18px; border-radius: 20px !important; padding: 14px 24px !important; font-size: 0.95rem !important; background-color: var(--bg-color) !important;}
+    .category-pills { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; margin-bottom: 5px; scrollbar-width: none; -webkit-overflow-scrolling: touch; flex-shrink: 0; }
+    .category-pills::-webkit-scrollbar { display: none; }
+    .pill { padding: 10px 20px; background: var(--input-bg); border: 1px solid var(--text-muted); border-radius: 30px; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; white-space: nowrap; cursor: pointer; transition: all 0.3s; }
+    .pill:hover { background: var(--border); color: var(--text-main); }
+    .pill.active { background: var(--accent); color: #ffffff; border-color: var(--accent); }
+
+    .servicios-lista { flex-grow: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 5px; padding-bottom: 20px; }
+    .servicios-lista::-webkit-scrollbar { width: 6px; }
+    .servicios-lista::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    .svc-card { display: flex; align-items: center; gap: 18px; padding: 14px; background: var(--input-bg); border: 1px solid var(--text-muted); border-radius: 18px; cursor: pointer; transition: all 0.2s ease; }
+    .svc-card:hover { border-color: var(--text-muted); background: var(--card-bg); }
+    .svc-img { width: 56px; height: 56px; border-radius: 12px; background-color: var(--bg-color); background-size: cover; background-position: center; flex-shrink: 0; }
+    .svc-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+    .svc-name { font-size: 1rem; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
+    .svc-meta { font-size: 0.85rem; color: var(--success); font-weight: 600; }
+    .aw-time { color: var(--text-muted); font-weight: 500; }
+    .aw-dot { margin: 0 8px; color: var(--text-muted); opacity: 0.4; }
+    .aw-price { font-weight: 800; color: var(--text-main); font-size: 0.95rem; letter-spacing: 0.3px; }
+
+    .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; margin-top: 5px; }
+    .slot-btn { background: var(--input-bg); border: 1px solid var(--text-muted); color: var(--text-main); padding: 16px 0; border-radius: 14px; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; font-weight: 600; text-align: center; }
+    .slot-btn:hover { border-color: var(--text-muted); }
+    .slot-btn.selected { background: #e5e7eb; color: #111827; border-color: #e5e7eb; box-shadow: 0 4px 12px rgba(0,0,0,0.25); }
+    
+    .btn-submit { width: 100%; padding: 20px; background: #e5e7eb; color: #111827 !important; border: none; border-radius: 16px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 15px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+    .btn-submit:hover:not(:disabled) { background: #ffffff; transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,0.35); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; filter: none; }
+    
+    .hidden { display: none !important; }
+
+    /* --- SKELETON LOADERS (Premium UX) --- */
+    .skeleton-container { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-top: 10px; }
+    #loader-horarios.skeleton-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; }
+    
+    .skeleton { 
+      background: linear-gradient(90deg, var(--input-bg) 25%, var(--border) 50%, var(--input-bg) 75%); 
+      background-size: 400% 100%; 
+      animation: shimmer 1.5s infinite ease-in-out; 
+    }
+    .skeleton-card { height: 86px; width: 100%; border-radius: 18px; }
+    .skeleton-btn { height: 53px; width: 100%; border-radius: 14px; }
+    
+    @keyframes shimmer { 
+      0% { background-position: 200% 0; } 
+      100% { background-position: -200% 0; } 
+    }
+    
+    .brand-footer { margin-top: 30px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; text-align: center; text-decoration: none; display: block; font-weight: 500;}
+    .brand-footer strong { color: var(--text-main); font-weight: 700; }
+
+    /* ── SELECTOR DE ESPECIALISTA (Avatar Cards) ── */
+    .profesionales-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+    .prof-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--input-bg); border: 1px solid var(--text-muted); border-radius: 14px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
+    .prof-card:hover { border-color: #6b7280; background: var(--card-bg); }
+    .prof-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 1px solid #3a3a3e; flex-shrink: 0; }
+    .prof-avatar-fallback { width: 40px; height: 40px; border-radius: 50%; background: #222222; border: 1px solid #3a3a3e; display: flex; align-items: center; justify-content: center; color: #9ca3af; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .prof-name { font-size: 0.9rem; font-weight: 600; color: var(--text-main); line-height: 1.2; }
+    .prof-tag { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+
+    /* ── NOMI CHAT ASÍNCRONO (Buzón de Consultas) — Aislado bajo prefijo #nomi-* ── */
+    #nomi-chat-widget { display: block; }
+    #nomi-chat-widget *, #nomi-chat-widget *::before, #nomi-chat-widget *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    #nomi-chat-fab {
+      position: fixed; bottom: 90px; right: 20px; z-index: 1200;
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--card-bg, #2e343a); border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-main, #FFFFFF); padding: 13px 20px; border-radius: 999px;
+      font-size: 0.88rem; font-weight: 700; letter-spacing: 0.4px;
+      cursor: pointer; box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    #nomi-chat-fab:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.32); background: var(--border, #3f4752); }
+    #nomi-chat-fab:active { transform: translateY(0); }
+    .nomi-fab-icon { display: block; flex-shrink: 0; }
+
+    #nomi-chat-panel {
+      position: fixed; right: 20px; bottom: 154px; z-index: 1200;
+      width: 350px; max-width: calc(100vw - 24px); height: 480px; max-height: calc(100vh - 190px); max-height: calc(100dvh - 190px);
+      background: var(--bg-color, #1a1d24); border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px; overflow: hidden;
+      display: none; flex-direction: column;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.6), 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+    #nomi-chat-widget.open #nomi-chat-panel {
+      display: flex;
+      animation: nomi-chat-entrada 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    @keyframes nomi-chat-entrada {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #nomi-chat-header {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 10px; padding: 16px 18px;
+      background: var(--card-bg, #2e343a); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+    #nomi-chat-header-titulos { min-width: 0; }
+    #nomi-chat-title { font-size: 0.95rem; font-weight: 700; color: var(--text-main, #FFFFFF); letter-spacing: -0.2px; }
+    #nomi-chat-status { font-size: 0.7rem; color: var(--text-muted, #9ba4b5); font-weight: 500; margin-top: 2px; }
+    #nomi-chat-close {
+      width: 32px; height: 32px; flex-shrink: 0;
+      background: var(--input-bg, #22272c); border: 1px solid rgba(255, 255, 255, 0.16);
+      color: var(--text-muted, #9ba4b5); border-radius: 50%; font-size: 1.15rem; line-height: 1;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    #nomi-chat-close:hover { background: var(--brand-pink, #FF3488); border-color: var(--brand-pink, #FF3488); color: #FFFFFF; }
+
+    #nomi-chat-messages {
+      flex: 1; overflow-y: auto; padding: 18px;
+      display: flex; flex-direction: column; gap: 10px;
+      scroll-behavior: smooth;
+    }
+    #nomi-chat-messages::-webkit-scrollbar { width: 5px; }
+    #nomi-chat-messages::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+    #nomi-chat-empty {
+      color: var(--text-muted, #9ba4b5); font-size: 0.85rem; text-align: center;
+      padding: 30px 12px; line-height: 1.55; margin: auto;
+    }
+    .nomi-msg {
+      max-width: 82%; padding: 10px 14px; border-radius: 16px;
+      font-size: 0.87rem; line-height: 1.45;
+      overflow-wrap: anywhere; word-break: break-word;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    }
+    .nomi-msg-cliente { align-self: flex-end; background-color: var(--accent, #3841F2); color: #ffffff; border-radius: 16px 16px 4px 16px; max-width: 85%; padding: 10px 14px; word-wrap: break-word; }
+    .nomi-msg-admin { align-self: flex-start; background: var(--card-bg, #2e343a); color: var(--text-main, #FFFFFF); border: 1px solid rgba(255, 255, 255, 0.09); border-bottom-left-radius: 4px; }
+    .nomi-msg-texto { white-space: pre-wrap; }
+    .nomi-msg-time { display: block; font-size: 0.7rem; opacity: 0.8; margin-top: 4px; text-align: right; }
+    .nomi-msg-admin .nomi-msg-time { text-align: left; }
+
+    #nomi-chat-footer {
+      display: flex; gap: 10px; padding: 12px 14px;
+      background: var(--card-bg, #ffffff); border-top: 1px solid #eaeaea;
+      flex-shrink: 0;
+    }
+    #nomi-chat-input {
+      flex: 1; min-width: 0; padding: 12px 16px;
+      background-color: transparent; border: none; border-radius: 12px;
+      color: var(--text-main, #FFFFFF); font-size: 0.9rem; outline: none !important;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    #nomi-chat-input:focus { background-color: transparent; box-shadow: none; }
+    #nomi-chat-send {
+      flex-shrink: 0; padding: 0 20px; border: none; border-radius: 12px;
+      background: #e5e7eb; color: #111827; font-size: 0.88rem; font-weight: 800;
+      cursor: pointer; transition: background 0.2s ease, transform 0.15s ease;
+    }
+    #nomi-chat-send:hover:not(:disabled) { background: #FFFFFF; }
+    #nomi-chat-send:active:not(:disabled) { transform: scale(0.97); }
+    #nomi-chat-send:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    @media (max-width: 640px) {
+      #nomi-chat-fab { bottom: 20px; right: 16px; padding: 13px 18px; }
+      #nomi-chat-panel {
+        left: 0; right: 0; bottom: 0; width: 100%; max-width: 100%;
+        height: 74vh; max-height: 78vh;
+        border-radius: 20px 20px 0 0;
+        border-left: none; border-right: none; border-bottom: none;
+      }
+    }
+  </style>
 </head>
-<body>
+<body style="opacity: 0; transition: opacity 0.4s ease, background-color 0.4s ease;">
 
-  <!-- ── HEADER PÚBLICO ── -->
-  <header class="site-header">
-    <img src="/logo-solutto.png" alt="Solutto studio" class="logo-img">
-  </header>
-
-  <div id="app">
-    <div class="progress-bar">
-      <div class="progress-step active" id="ps-1">1</div>
-      <div class="progress-line" id="pl-1"></div>
-      <div class="progress-step" id="ps-2">2</div>
-      <div class="progress-line" id="pl-2"></div>
-      <div class="progress-step" id="ps-3">3</div>
-      <div class="progress-line" id="pl-3"></div>
-      <div class="progress-step" id="ps-4">4</div>
-    </div>
-
-    <div class="step-title" id="step-title">
-      <h2>Elege tu servicio</h2>
-    </div>
-
-    <section id="step-services" class="view active">
-      <div id="loader-services" class="spinner-container hidden"><div class="spinner"></div></div>
-      <p id="services-error" class="error-msg hidden"></p>
-      <div id="services-grid"></div>
-    </section>
-
-    <section id="step-datetime" class="view">
-      <div id="selected-service-info" class="selected-info-card"></div>
-      <div class="field">
-        <label for="date-input">Seleccioná una fecha</label>
-        <input type="date" id="date-input" class="input-date">
+  <div class="booking-container">
+    
+    <img src="/Logo-completo-removebg-preview.webp" id="logo-principal" alt="Marca" style="width: 100%; max-width: 200px; height: auto; max-height: 90px; margin: 0 auto 15px; display: block; object-fit: contain; filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.3));">
+    
+    <h1>Reserva de Turno</h1>
+    <p class="subtitle">Completá tus datos para asegurar tu espacio.</p>
+    
+    <form id="reserva-form">
+      <div class="form-group">
+        <label class="section-label">1. Servicio a realizar</label>
+        <div id="btn-abrir-modal" class="trigger-card">
+          <span id="trigger-text" class="tc-text placeholder">Seleccioná un servicio...</span>
+          <span class="tc-icon">›</span>
+        </div>
+        <select id="select-servicio" required style="display:none;"></select>
       </div>
-      <div id="loader-slots" class="spinner-container hidden"><div class="spinner"></div></div>
-      <p id="slots-error" class="error-msg hidden"></p>
-      <div id="slots-container" class="slots-container">
-        <p class="slots-placeholder">Seleccioná una fecha para ver los horarios disponibles.</p>
+
+      <div class="form-group hidden" id="group-profesional">
+        <label class="section-label">2. Especialista</label>
+        <input type="hidden" id="select-profesional" value="">
+        <div id="profesionales-ui-container" class="profesionales-grid"></div>
       </div>
-    </section>
 
-    <section id="step-form" class="view">
-      <div id="selected-info-card" class="selected-info-card"></div>
-      <form id="booking-form">
-        <input type="text" name="website" style="display:none;">
-        <div class="field"><label>Nombre y Apellido</label><input type="text" name="cliente" placeholder="Ej: Camila González"><span class="field-error" id="error-cliente"></span></div>
-        <div class="field"><label>Email</label><input type="email" name="email" placeholder="Ej: camila@email.com"><span class="field-error" id="error-email"></span></div>
-        <div class="field"><label>Teléfono (WhatsApp)</label><input type="tel" name="telefono" placeholder="Ej: 1123456789"><span class="field-error" id="error-telefono"></span></div>
-        <p id="global-error" class="error-msg hidden" style="text-align:center; margin-bottom: 15px;"></p>
-        <button type="submit" class="btn btn-primary" id="btn-submit">Confirmar reserva</button>
-      </form>
-    </section>
+      <div class="form-group hidden" id="group-pago">
+        <label class="section-label">3. Modalidad de Reserva</label>
+        <div class="pago-options">
+          
+          <div id="opt-mp" style="display: flex; gap: 10px; width: 100%;">
+              <label class="pago-card" id="opt-mp-sena">
+                <input type="radio" name="tipo_pago" value="mp_sena" checked>
+                <span>Mercado Pago (Seña <span class="mp-sena-label">25</span>%)</span>
+              </label>
+              <label class="pago-card" id="opt-mp-total">
+                <input type="radio" name="tipo_pago" value="mp_total">
+                <span>Mercado Pago (100%)</span>
+              </label>
+          </div>
+          
+          <label class="pago-card hidden" id="opt-transferencia">
+            <input type="radio" name="tipo_pago" value="transferencia">
+            <span>Transferencia Bancaria</span>
+          </label>
+          
+          <label class="pago-card hidden" id="opt-local">
+            <input type="radio" name="tipo_pago" value="local">
+            <span>Abonar en el Local</span>
+          </label>
+          
+        </div>
+      </div>
 
-    <section id="step-confirmation" class="view">
-      <div class="success-icon-large" style="text-align:center; color: var(--primary); font-size: 3rem; margin-bottom: 20px;">✓</div>
-      <div id="confirmation-details" class="confirmation-details"></div>
-      <button class="btn btn-primary" id="btn-new-booking">Hacer otra reserva</button>
-    </section>
+      <div class="form-group">
+        <label class="section-label">4. Fecha</label>
+        <input type="text" id="input-fecha" placeholder="Seleccioná en el calendario" required disabled>
+      </div>
 
-    <div class="nav-buttons">
-      <button class="btn btn-secondary hidden" id="btn-back">Volver</button>
-    </div>
+      <div class="form-group">
+        <label class="section-label">5. Disponibilidad</label>
+        
+        <!-- SKELETON LOADER HORARIOS -->
+        <div id="loader-horarios" class="skeleton-container hidden">
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+          <div class="skeleton skeleton-btn"></div>
+        </div>
 
-    <!-- ── FOOTER ── -->
-    <footer class="site-footer">
-      <span class="footer__by">Powered by</span>
-      <a href="https://awtechnology.dev" target="_blank" rel="noopener noreferrer" class="footer__brand">Aw Technology</a>
-    </footer>
+        <div id="slots-container" class="slots-grid">
+          <p id="slot-placeholder" style="color: var(--text-muted); grid-column: 1 / -1; text-align: center; padding: 10px 0; font-size: 0.85rem;">Seleccioná un servicio y una fecha.</p>
+        </div>
+        <input type="hidden" id="input-hora" required>
+      </div>
+
+      <div class="form-group">
+        <label class="section-label">Tus Datos</label>
+        <input type="text" id="input-nombre" placeholder="Nombre y Apellido" required style="margin-bottom: 12px;">
+        <input type="email" id="input-email" placeholder="correo@ejemplo.com" required style="margin-bottom: 12px;">
+        <input type="tel" id="input-telefono" placeholder="WhatsApp (Ej: 1123456789)" required>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 15px;">
+        <span id="btn-show-discount" class="coupon-trigger">¿Tenés un código de invitación?</span>
+        <div id="discount-wrapper" class="coupon-wrapper hidden">
+          <input type="text" id="input-cupon" placeholder="Ingresa tu código" autocomplete="off">
+          <button type="button" id="btn-apply-discount" class="btn-apply">Aplicar</button>
+        </div>
+        <div id="discount-message" class="coupon-msg hidden"></div>
+      </div>
+
+      <div class="mp-notice" id="mp-notice-box"><span>🔒 Serás redirigido a Mercado Pago para abonar de forma segura</span></div>
+      <button type="submit" id="btn-submit" class="btn-submit" disabled>Pagar y Confirmar</button>
+    </form>
   </div>
 
-  <div id="success-modal-overlay" class="modal-overlay hidden">
-    <div class="success-modal" id="success-modal">
-      <div class="modal__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
-      <h3 class="modal__title">¡Reserva Exitosa!</h3>
-      <p style="color: var(--text-muted); margin-bottom: 20px;">Te enviamos los detalles a tu email.</p>
-      <div style="background: var(--bg-dark); padding: 15px; border-radius: 6px; margin-bottom: 25px; text-align:left;">
-        <div style="font-size: 0.85rem; font-weight:600; color:var(--primary); margin-bottom: 5px;" id="modal-date"></div>
-        <div style="font-size: 0.85rem; color:var(--text-main);" id="modal-time"></div>
-        <div style="font-size: 0.85rem; color:var(--text-main);" id="modal-service"></div>
+  <a href="https://awtechnology.dev" target="_blank" class="brand-footer">Powered by <strong>Aw Technology</strong></a>
+
+  <div id="modal-catalogo" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Catálogo de Servicios</h3>
+        <button id="btn-cerrar-modal" class="btn-close">×</button>
       </div>
-      <button class="btn btn-primary" id="btn-finalizar">Entendido</button>
+      <div class="modal-body">
+        <input type="text" id="search-tratamientos" class="search-input" placeholder="🔍 Buscar (ej. Láser, Uñas...)">
+        
+        <!-- SKELETON LOADER SERVICIOS -->
+        <div id="loader-servicios" class="skeleton-container hidden">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+
+        <div id="category-pills" class="category-pills hidden"></div>
+        <div id="servicios-lista" class="servicios-lista hidden"></div>
+      </div>
     </div>
   </div>
 
-  <script src="/app.js"></script>
+  <script src="app.js?v=ux_fix"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      flatpickr("#input-fecha", {
+        locale: "es", minDate: "today", disableMobile: "true",
+        disable: [ function(date) { return (date.getDay() === 0); } ],
+        onChange: function() { document.getElementById('input-fecha').dispatchEvent(new Event('change')); }
+      });
+    });
+  </script>
+
+  <!-- SERVICE WORKER REGISTRATION (Para gestionar la caché en iOS y PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+          console.log('Service Worker registrado con éxito:', reg.scope);
+        }).catch(err => {
+          console.log('Fallo al registrar el Service Worker:', err);
+        });
+      });
+    }
+  </script>
+
+  <!-- ── NOMI CHAT ASÍNCRONO (Buzón de Consultas) ── -->
+  <div id="nomi-chat-widget">
+    <button type="button" id="nomi-chat-fab" aria-label="Abrir consultas" aria-expanded="false">
+      <svg class="nomi-fab-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+      </svg>
+      <span class="nomi-fab-text">Consultas</span>
+    </button>
+    <div id="nomi-chat-panel" aria-hidden="true">
+      <div id="nomi-chat-header">
+        <div id="nomi-chat-header-titulos">
+          <div id="nomi-chat-title">Consultas</div>
+          <div id="nomi-chat-status">Respondemos en horario de atención</div>
+        </div>
+        <button type="button" id="nomi-chat-close" aria-label="Cerrar chat">×</button>
+      </div>
+      <div id="nomi-chat-messages" role="log" aria-live="polite"></div>
+      <div id="nomi-chat-footer">
+        <input type="text" id="nomi-chat-input" placeholder="Escribí tu consulta..." autocomplete="off" maxlength="1000" aria-label="Tu consulta">
+        <button type="button" id="nomi-chat-send">Enviar</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
